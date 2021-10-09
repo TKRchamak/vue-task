@@ -5,34 +5,44 @@
         <div v-for="pd in cartData" :key="pd.id" class="card mb-3">
           <div class="row g-0">
             <div class="col-md-4">
-              <img :src=pd.image class="img-fluid rounded-start" alt="img" />
+              <img :src="pd.image" class="img-fluid rounded-start" alt="img" />
             </div>
             <div class="col-md-8">
               <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                  <small class="text-muted"></small>
-                </p>
+                <div class="d-flex justify-content-between">
+                  <h5 class="card-title">Selected Phone</h5>
+                  <button @click="removeData(pd.id)" class="btn btn-danger">Delete</button>
+                </div>
+                <p class="card-text">Price : {{pd.charge}}</p>
+                <h4 class="card-text">Quantity : {{pd.quantity}}</h4>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="col-4">
+        <div class="mb-5">
           <h3 class="text-center">Your Cart</h3>
           <h4>Price Details</h4>
-          <hr>
+          <hr />
           <div class="d-flex justify-content-between">
-                <strong>Total Product Price</strong>
-                <p>{{ totalCost }}</p>
+            <strong>Total Quantity</strong>
+            <p>{{ totalQuantity }}</p>
           </div>
+          <div class="d-flex justify-content-between">
+            <strong>Total Product Price</strong>
+            <p>{{ totalCost }}</p>
+          </div>
+        </div>
+        <button class="col-6 bigBtn active" @click="processOrder">
+          Buy Now
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
 export default {
   name: "Cart",
 
@@ -40,13 +50,16 @@ export default {
     return {
       cartData: [],
       totalCost: 0,
+      totalQuantity: 0,
     };
   },
   created() {
     let data = this.getData();
-    let cartSelectedData = Object.values(data)
+    let cartSelectedData = Object.values(data);
     this.cartData = data;
-    this.totalPrice(cartSelectedData)
+    console.log(data);
+    this.totalPrice(cartSelectedData);
+    this.totalProductQuantity(cartSelectedData);
   },
   methods: {
     getData() {
@@ -62,12 +75,34 @@ export default {
       localStorage.removeItem(this.getData());
     },
     totalPrice(value) {
-        const total = value.reduce((sum, event) => sum+event.charge*event.quantity , 0)
-        this.totalCost = total;
-    }
-
+      const total = value.reduce(
+        (sum, event) => sum + event.charge * event.quantity,
+        0
+      );
+      this.totalCost = total;
+    },
+    totalProductQuantity(value) {
+      const total = value.reduce((sum, event) => sum + event.quantity, 0);
+      this.totalQuantity = total;
+    },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.bigBtn {
+  width: 45%;
+  padding: 8px 0;
+  border: 2px solid #f79637;
+  background-color: white;
+  border-radius: 26px;
+  font-size: 25px;
+  font-weight: 800;
+  margin: 5px;
+}
+.bigBtn.active {
+  border: 2px solid #f79637;
+  background-color: #f79637;
+  color: white;
+}
+</style>

@@ -23,7 +23,7 @@
 
             <label style="color: #808080" for="emi"
               ><input type="checkbox" name="" id="emi" /> Available EMI Offer
-              <span style="color:#f79637">View Plans</span></label
+              <span style="color: #f79637">View Plans</span></label
             >
             <hr />
             <div>
@@ -55,25 +55,25 @@
                   >
                     <button
                       v-if="c.id === 3483"
-                      style="background-color: #FDEED7"
+                      style="background-color: #fdeed7"
                       class="circle"
                       @click="changeColorCode(c.id)"
                     ></button>
                     <button
                       v-if="c.id === 3484"
-                      style="background-color: #314B56"
+                      style="background-color: #314b56"
                       class="circle me-2"
                       @click="changeColorCode(c.id)"
                     ></button>
                     <button
                       v-if="c.id === 3485"
-                      style="background-color: #4A4946"
+                      style="background-color: #4a4946"
                       class="circle me-2"
                       @click="changeColorCode(c.id)"
                     ></button>
                     <button
                       v-if="c.id === 3486"
-                      style="background-color: #F1F1EC"
+                      style="background-color: #f1f1ec"
                       class="circle me-2"
                       @click="changeColorCode(c.id)"
                     ></button>
@@ -112,13 +112,28 @@
                   <button @click="increase()" class="btn countBtn border me-2">
                     +
                   </button>
-                  <input
+                  <span
+                    style="
+                      padding: 6px 14px 11px;
+                      border-radius: 3px;
+                      background-color: #fcd6aa;
+                    "
+                  >
+                    {{ quantity }}
+                  </span>
+                  <!-- <input
                     class="border"
-                    style="width:40px; padding: 5px 0 9px 0; text-align:right;border-radius:3px; background-color: #FCD6AA"
+                    style="
+                      width: 40px;
+                      padding: 5px 0 9px 0;
+                      text-align: right;
+                      border-radius: 3px;
+                      background-color: #fcd6aa;
+                    "
                     type="number"
                     :value="quantity"
                     @blur="update(value)"
-                  />
+                  /> -->
                   <button @click="decrease()" class="btn countBtn border ms-2">
                     -
                   </button>
@@ -247,9 +262,21 @@ export default {
     },
     addToDatabase(product, quantity) {
       const currentCart = this.getData();
-      product["quantity"] = quantity;
-      currentCart[product.id] = product;
-      localStorage.setItem("user", JSON.stringify(currentCart));
+      const curCartValue = Object.values(currentCart);
+      // console.log(curCartValue);
+      const count = curCartValue.filter((p) => p.id === product.id);
+      if (count[0]?.quantity > 0) {
+        // console.log(count[0]?.quantity);
+        quantity = count[0]?.quantity + quantity;
+        // console.log(quantity);
+        product["quantity"] = quantity;
+        currentCart[product.id] = product;
+        localStorage.setItem("user", JSON.stringify(currentCart));
+      }else {
+        product["quantity"] = quantity;
+        currentCart[product.id] = product;
+        localStorage.setItem("user", JSON.stringify(currentCart));
+        }
     },
 
     //      const addToCard = (pd) => {
