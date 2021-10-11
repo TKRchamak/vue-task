@@ -88,7 +88,7 @@
             </div>
             <div
               class="d-flex justify-content-between"
-              style="borderbottom: 2px dotted gray"
+              style="border-bottom: 2px dotted gray"
             >
               <strong>Delivery Charges</strong>
               <p>(will be added)</p>
