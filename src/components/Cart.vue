@@ -1,45 +1,109 @@
 <template>
-  <div class="container">
+  <div class="container-fluid">
     <div class="row">
-      <div class="col-8 border-end">
-        <!-- <div v-for="pd in $store.state.cartData" :key="pd.id" class="card mb-3"> -->
-        <div v-for="pd in cartData" :key="pd.id" class="card mb-3">
-          <div class="row g-0">
-            <div class="col-md-4">
-              <img :src="pd.image" class="img-fluid rounded-start" alt="img" />
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <div class="d-flex justify-content-between">
-                  <h5 class="card-title">Selected Phone</h5>
-                  <button @click="removeData(pd.id)" class="btn btn-danger">
+      <div class="col-md-8">
+        <div class="container">
+          <div class="shadow mb-5 bg-body rounded">
+            <h2
+              class="ps-5 pt-2 pb-2 rounded-top"
+              style="background-color: #dcdcdc"
+            >
+              Product
+            </h2>
+            <div v-for="pd in cartData" :key="pd.id">
+              <div class="container row pt-3">
+                <div class="col-md-3 mb-3">
+                  <div class="text-center">
+                    <img
+                      :src="pd.image"
+                      class="img-fluid rounded-start"
+                      alt="img"
+                    />
+                  </div>
+                  <div class="text-center">
+                    <div class="">
+                      <button
+                        @click="addToDatabase(pd, 1)"
+                        class="btn countBtn border me-2"
+                      >
+                        +
+                      </button>
+                      <span
+                        style="
+                          padding: 6px 14px 11px;
+                          border-radius: 3px;
+                          background-color: #fcd6aa;
+                        "
+                      >
+                        {{ pd.quantity }}
+                      </span>
+                      <button
+                        @click="addToDatabase(pd, -1)"
+                        class="btn countBtn border ms-2"
+                      >
+                        -
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-2 position-md-relative">
+                  <div class="">
+                    <h5 class="">iPhone 12 Pro Max</h5>
+                    <p>Brand: <span>Apple</span></p>
+                    <p>Gold, e-Sim, USA, 256GB</p>
+                  </div>
+                  <p class="position-md-absolute bottom-0">
+                    Unit Price BDT {{ pd.charge }}
+                  </p>
+                </div>
+                <div class="col-md-3 mb-2 text-center">
+                  <button
+                    @click="removeData(pd.id)"
+                    class="btn btn-danger mb-5"
+                  >
                     Delete
                   </button>
+                  <h5>BDT 113500</h5>
                 </div>
-                <p class="card-text">Price : {{ pd.charge }}</p>
-                <h4 class="card-text">Quantity : {{ pd.quantity }}</h4>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-4">
-        <div class="mb-5">
-          <h3 class="text-center">Your Cart</h3>
-          <h4>Price Details</h4>
-          <hr />
-          <div class="d-flex justify-content-between">
-            <strong>Total Quantity</strong>
-            <p>{{ totalQuantity }}</p>
+      <div
+        class="col-md-4 shadow mb-5 bg-body rounded"
+        style="background-color: #f7f7f7"
+      >
+        <div class="container">
+          <div class="mb-5">
+            <div class="text-center pb-5">
+              <h3>Your Cart ({{ totalQuantity }})</h3>
+              <small>Start adding items to your cart</small>
+            </div>
+            <h4>Price Details</h4>
+            <hr />
+            <div class="d-flex justify-content-between">
+              <strong>Total Product Price</strong>
+              <p>{{ totalCost }}</p>
+            </div>
+            <div
+              class="d-flex justify-content-between"
+              style="borderbottom: 2px dotted gray"
+            >
+              <strong>Delivery Charges</strong>
+              <p>(will be added)</p>
+            </div>
+            <div class="d-flex justify-content-between">
+              <strong>Total Amount</strong>
+              <p>{{ totalCost }}</p>
+            </div>
           </div>
-          <div class="d-flex justify-content-between">
-            <strong>Total Product Price</strong>
-            <p>{{ totalCost }}</p>
+          <div class="text-center pb-5">
+            <button class="bigBtn" @click="processOrder">
+              CHECK OUT
+            </button>
           </div>
         </div>
-        <button class="col-6 bigBtn active" @click="processOrder">
-          Buy Now
-        </button>
       </div>
     </div>
   </div>
@@ -66,9 +130,30 @@ export default {
   },
   methods: {
     ...mapMutations(["processOrder"]),
+    increase(id) {
+      let currentPro = cartSelectedData.filter((p) => p.id === product.id);
+    },
     getData() {
       const data = localStorage.getItem("user") || "{}";
       return JSON.parse(data);
+    },
+    addToDatabase(product, quantity) {
+      const currentCart = this.getData();
+      const curCartValue = Object.values(currentCart);
+      // console.log(curCartValue);
+      const count = curCartValue.filter((p) => p.id === product.id);
+      if (count[0]?.quantity > 0) {
+        // console.log(count[0]?.quantity);
+        quantity = count[0]?.quantity + quantity;
+        // console.log(quantity);
+        product["quantity"] = quantity;
+        currentCart[product.id] = product;
+        localStorage.setItem("user", JSON.stringify(currentCart));
+      } else {
+        product["quantity"] = quantity;
+        currentCart[product.id] = product;
+        localStorage.setItem("user", JSON.stringify(currentCart));
+      }
     },
     removeData(key) {
       const currentCart = this.getData();

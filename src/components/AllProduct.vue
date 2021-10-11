@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <div class="card mb-3 mt-3 border-0">
-      <!-- <div v-for="product in products" :key="product.id" class="row g-0"> -->
       <div class="row g-0">
         <div class="col-md-5">
           <img
@@ -32,10 +31,10 @@
                 :key="index"
                 class="row p-2"
               >
-                <div class="col-2">
+                <div class="col-md-3 mb-2">
                   <strong> {{ Object.keys(type)[0] }}:</strong>
                 </div>
-                <div v-if="type.Storage" class="col-10">
+                <div v-if="type.Storage" class="col-md-9">
                   <button
                     @click="changeStorageCode(store.id)"
                     v-for="store in type.Storage"
@@ -46,7 +45,7 @@
                     {{ store.value }}
                   </button>
                 </div>
-                <div v-if="type.Color" class="col-10">
+                <div v-if="type.Color" class="col-md-9">
                   <div
                     v-for="c in type.Color"
                     :key="c.id"
@@ -79,7 +78,7 @@
                     ></button>
                   </div>
                 </div>
-                <div v-if="type.Sim" class="col-10">
+                <div v-if="type.Sim" class="col -md-9">
                   <button
                     v-for="s in type.Sim"
                     :key="s.id"
@@ -90,7 +89,7 @@
                     {{ s.value }}
                   </button>
                 </div>
-                <div v-if="type.Region" class="col-10">
+                <div v-if="type.Region" class="col-md-9">
                   <button
                     v-for="r in type.Region"
                     :key="r.id"
@@ -105,10 +104,10 @@
             </div>
             <div v-if="selectProduct.stock !== 0" :class="disable">
               <div class="row p-2">
-                <div class="col-2">
+                <div class="col-md-3 mb-2">
                   <strong>Quantity:</strong>
                 </div>
-                <div class="col-9">
+                <div class="col-md-9">
                   <button @click="increase()" class="btn countBtn border me-2">
                     +
                   </button>
@@ -272,13 +271,19 @@ export default {
         product["quantity"] = quantity;
         currentCart[product.id] = product;
         localStorage.setItem("user", JSON.stringify(currentCart));
-      }else {
+      } else {
         product["quantity"] = quantity;
         currentCart[product.id] = product;
         localStorage.setItem("user", JSON.stringify(currentCart));
-        }
+      }
     },
 
+    changeColor(value) {
+      const code = value.split("_")[1];
+      const colorCode = `# ${code}`;
+      console.log(colorCode);
+      return colorCode;
+    },
     //      const addToCard = (pd) => {
 
     //     const count = (cart.filter((p) => p._id === pd._id))
