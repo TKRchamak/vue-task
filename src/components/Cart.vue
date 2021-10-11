@@ -182,18 +182,13 @@ export default {
 
 <style scoped>
 .bigBtn {
-  width: 45%;
-  padding: 8px 0;
-  border: 2px solid #f79637;
-  background-color: white;
-  border-radius: 26px;
-  font-size: 25px;
-  font-weight: 800;
-  margin: 5px;
-}
-.bigBtn.active {
-  border: 2px solid #f79637;
-  background-color: #f79637;
+  width: 50%;
+  padding: 7px 0;
+  font-weight: bold;
   color: white;
+  background-color: #F5890B;
+  text-align: center;
+  border: none;
+  border-radius: 3px;
 }
 </style>
